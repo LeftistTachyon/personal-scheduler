@@ -1,8 +1,7 @@
 import {
 	Box,
 	Center,
-	Divider,
-	HStack,
+	Grid,
 	Icon,
 	SimpleGrid,
 	Stack,
@@ -11,8 +10,7 @@ import {
 	VStack,
 } from "@chakra-ui/react";
 import NextChakraLink from "@components/nextChakraLink";
-import { useContainerDimensions } from "hooks/useContainerDimensions";
-import { useRef } from "react";
+import React, { cloneElement } from "react";
 import { FaGithub } from "react-icons/fa";
 
 const shownHours: string[] = [
@@ -44,8 +42,8 @@ const shownHours: string[] = [
 ];
 
 export default function Home() {
-	const ref = useRef();
-	const { height } = useContainerDimensions(ref);
+	// const ref = useRef();
+	// const { height } = useContainerDimensions(ref);
 
 	return (
 		<Stack
@@ -59,7 +57,7 @@ export default function Home() {
 			<GridItem as="button">
 				<Text>&lt;</Text>
 			</GridItem>
-			<GridItem flex={1} align="stretch">
+			<GridItem flex={1} align="stretch" p={5}>
 				{/* <Stack spacing={0}>
 					<Divider flex={1} />
 					{shownHours.map((hour) => (
@@ -71,7 +69,7 @@ export default function Home() {
 					))}
 					<Divider flex={1} />
 				</Stack> */}
-				<Box position="relative" ref={ref} h="100%">
+				{/* <Box position="relative" h="100%">
 					{shownHours.map((hour, idx) => (
 						<HStack
 							key={hour}
@@ -90,7 +88,28 @@ export default function Home() {
 							/>
 						</HStack>
 					))}
-				</Box>
+				</Box> */}
+				<Grid
+					templateColumns="auto minmax(0, 1fr)"
+					columnGap={2}
+					h="100%"
+				>
+					{shownHours.map((hour, idx) =>
+						cloneElement(
+							<>
+								<Text textAlign="right">{hour}</Text>
+								<Box
+									borderColor="black"
+									borderTopWidth={1}
+									borderBottomWidth={
+										idx + 1 == shownHours.length ? 1 : 0
+									}
+								/>
+							</>,
+							{ key: hour }
+						)
+					)}
+				</Grid>
 			</GridItem>
 			<VStack flex={2} align="stretch" spacing={10}>
 				<Box flex={1}>
