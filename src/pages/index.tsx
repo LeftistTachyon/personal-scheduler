@@ -14,7 +14,7 @@ import {
 	VStack,
 } from "@chakra-ui/react";
 import NextChakraLink from "@components/nextChakraLink";
-import { DateTime } from "luxon";
+import { DateTime, Duration } from "luxon";
 import React, { cloneElement, useState } from "react";
 import { FaEdit, FaGithub } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -44,7 +44,16 @@ const shownHours: string[] = [
 	"21:00",
 	"22:00",
 	"23:00",
-	// "24:00",
+];
+
+const todoItems: TodoItemData[] = [
+	{
+		title: "GFCGFHBKJNHTBHK",
+		description:
+			"This is a lengthy description that only exists to take up an extremely unnecessary amount of space and appear as though that I put many hours of effort into the descriptions of these tasks.",
+		isFixed: false,
+		duration: Duration.fromObject({ hour: 1 }),
+	},
 ];
 
 export default function Home() {
@@ -54,7 +63,7 @@ export default function Home() {
 	}, 60_000);
 
 	const percentage = (now.hour * 60 + now.minute + now.second / 60.0) / 14.4;
-	console.log("Redrawn", percentage);
+	// console.log("Redrawn", percentage);
 
 	return (
 		<Stack
@@ -105,7 +114,12 @@ export default function Home() {
 			<VStack flex={2} align="stretch" spacing={7}>
 				<Box flex={1}>
 					<SimpleGrid columns={2} spacing={10}>
-						<TodoItem
+						{todoItems
+							.filter((item) => !item.isFixed)
+							.map((item) => (
+								<TodoItem data={item} />
+							))}
+						{/* <TodoItem
 							title="Test item 1"
 							description="This is a lengthy description that only exists
 								to take up an extremely unnecessary amount of
@@ -132,7 +146,7 @@ export default function Home() {
 								to take up an extremely unnecessary amount of
 								space and appear as though that I put many hours
 								of effort into the descriptions of these tasks."
-						/>
+						/> */}
 					</SimpleGrid>
 				</Box>
 				<GridItem as="button">
@@ -159,7 +173,7 @@ function GridItem(props: StackProps): JSX.Element {
 		<Stack
 			rounded={30}
 			bg="primary"
-			boxShadow="15px 15px 30px #adc4cf, -15px -15px 30px #ebffff"
+			boxShadow="10px 10px 20px #adc4cf, -10px -10px 20px #ebffff"
 			padding={2.5}
 			justify="center"
 			align="center"
@@ -172,12 +186,14 @@ function GridItem(props: StackProps): JSX.Element {
 type TodoItemData = {
 	title: string;
 	description: string;
+	isFixed: boolean;
+	duration: Duration;
+	startTime?: DateTime;
 };
-type TodoItemProps = BoxProps & TodoItemData;
+type TodoItemProps = BoxProps & { data: TodoItemData };
 
 function TodoItem({
-	title,
-	description,
+	data: { title, description, duration },
 	...props
 }: TodoItemProps): JSX.Element {
 	return (
@@ -185,10 +201,10 @@ function TodoItem({
 			p={5}
 			rounded={30}
 			bg="primary"
-			boxShadow="15px 15px 30px #adc4cf, -15px -15px 30px #ebffff"
+			boxShadow="10px 10px 20px #adc4cf, -10px -10px 20px #ebffff"
 			{...props}
 		>
-			<Stack direction="row" float="right">
+			<Stack direction="row" float="right" pl={4}>
 				<InsetButton>
 					<Icon as={FaEdit} boxSize={4} />
 				</InsetButton>
@@ -197,6 +213,7 @@ function TodoItem({
 				</InsetButton>
 			</Stack>
 			<Heading size="md">{title}</Heading>
+			<Text as="i">{duration.toHuman()}</Text>
 			<Text>{description}</Text>
 		</Box>
 	);
