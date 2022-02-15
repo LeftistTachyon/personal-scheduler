@@ -2,6 +2,7 @@ import {
 	Box,
 	BoxProps,
 	Center,
+	Divider,
 	Grid,
 	Heading,
 	Icon,
@@ -9,10 +10,12 @@ import {
 	Stack,
 	StackProps,
 	Text,
+	useInterval,
 	VStack,
 } from "@chakra-ui/react";
 import NextChakraLink from "@components/nextChakraLink";
-import React, { cloneElement } from "react";
+import { DateTime } from "luxon";
+import React, { cloneElement, useState } from "react";
 import { FaEdit, FaGithub } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
@@ -45,15 +48,19 @@ const shownHours: string[] = [
 ];
 
 export default function Home() {
-	// const ref = useRef();
-	// const { height } = useContainerDimensions(ref);
+	const [now, setNow] = useState(DateTime.now());
+	useInterval(() => {
+		setNow(DateTime.now());
+	}, 60_000);
+
+	const percentage = (now.hour * 60 + now.minute + now.second / 60.0) / 14.4;
+	console.log("Redrawn", percentage);
 
 	return (
 		<Stack
 			spacing={10}
 			justifySelf="stretch"
 			align="stretch"
-			// minW="100vw"
 			p={10}
 			direction="row"
 		>
@@ -70,6 +77,7 @@ export default function Home() {
 					templateColumns="auto minmax(0, 1fr)"
 					columnGap={2}
 					h="100%"
+					position="relative"
 				>
 					{shownHours.map((hour, idx) =>
 						cloneElement(
@@ -86,113 +94,45 @@ export default function Home() {
 							{ key: hour }
 						)
 					)}
+					<Divider
+						borderColor="red"
+						position="absolute"
+						gridColumn={2}
+						top={percentage + "%"}
+					/>
 				</Grid>
 			</GridItem>
 			<VStack flex={2} align="stretch" spacing={7}>
 				<Box flex={1}>
 					<SimpleGrid columns={2} spacing={10}>
-						<GridItem p={5} display="block">
-							<Stack direction="row" float="right">
-								<InsetButton>
-									<Icon as={FaEdit} boxSize={4} />
-								</InsetButton>
-								<InsetButton>
-									<Icon as={MdDelete} boxSize={4} />
-								</InsetButton>
-							</Stack>
-							<Heading size="md">Test item 1</Heading>
-							<Text>
-								This is a lengthy description that only exists
+						<TodoItem
+							title="Test item 1"
+							description="This is a lengthy description that only exists
 								to take up an extremely unnecessary amount of
 								space and appear as though that I put many hours
-								of effort into the descriptions of these tasks.
-							</Text>
-						</GridItem>
-						<GridItem p={5} display="block">
-							<Stack direction="row" float="right">
-								<InsetButton>
-									<Icon as={FaEdit} boxSize={4} />
-								</InsetButton>
-								<InsetButton>
-									<Icon as={MdDelete} boxSize={4} />
-								</InsetButton>
-							</Stack>
-							<Heading size="md">Test item 1</Heading>
-							<Text>
-								This is a lengthy description that only exists
+								of effort into the descriptions of these tasks."
+						/>
+						<TodoItem
+							title="Test item 1"
+							description="This is a lengthy description that only exists
 								to take up an extremely unnecessary amount of
 								space and appear as though that I put many hours
-								of effort into the descriptions of these tasks.
-							</Text>
-						</GridItem>
-						<GridItem p={5} display="block">
-							<Stack direction="row" float="right">
-								<InsetButton>
-									<Icon as={FaEdit} boxSize={4} />
-								</InsetButton>
-								<InsetButton>
-									<Icon as={MdDelete} boxSize={4} />
-								</InsetButton>
-							</Stack>
-							<Heading size="md">Test item 1</Heading>
-							<Text>
-								This is a lengthy description that only exists
+								of effort into the descriptions of these tasks."
+						/>
+						<TodoItem
+							title="Test item 1"
+							description="This is a lengthy description that only exists
 								to take up an extremely unnecessary amount of
 								space and appear as though that I put many hours
-								of effort into the descriptions of these tasks.
-							</Text>
-						</GridItem>
-						<GridItem p={5} display="block">
-							<Stack direction="row" float="right">
-								<InsetButton>
-									<Icon as={FaEdit} boxSize={4} />
-								</InsetButton>
-								<InsetButton>
-									<Icon as={MdDelete} boxSize={4} />
-								</InsetButton>
-							</Stack>
-							<Heading size="md">Test item 1</Heading>
-							<Text>
-								This is a lengthy description that only exists
+								of effort into the descriptions of these tasks."
+						/>
+						<TodoItem
+							title="Test item 3"
+							description="This is a lengthy description that only exists
 								to take up an extremely unnecessary amount of
 								space and appear as though that I put many hours
-								of effort into the descriptions of these tasks.
-							</Text>
-						</GridItem>
-						<GridItem p={5} display="block">
-							<Stack direction="row" float="right">
-								<InsetButton>
-									<Icon as={FaEdit} boxSize={4} />
-								</InsetButton>
-								<InsetButton>
-									<Icon as={MdDelete} boxSize={4} />
-								</InsetButton>
-							</Stack>
-							<Heading size="md">Test item 1</Heading>
-							<Text>
-								This is a lengthy description that only exists
-								to take up an extremely unnecessary amount of
-								space and appear as though that I put many hours
-								of effort into the descriptions of these tasks.
-							</Text>
-						</GridItem>
-						<GridItem p={5} display="block">
-							<Stack direction="row" float="right">
-								<InsetButton>
-									<Icon as={FaEdit} boxSize={4} />
-								</InsetButton>
-								<InsetButton>
-									<Icon as={MdDelete} boxSize={4} />
-								</InsetButton>
-							</Stack>
-							<Heading size="md">Test item 1</Heading>
-							<Text>
-								This is a lengthy description that only exists
-								to take up an extremely unnecessary amount of
-								space and appear as though that I put many hours
-								of effort into the descriptions of these tasks.
-							</Text>
-						</GridItem>
+								of effort into the descriptions of these tasks."
+						/>
 					</SimpleGrid>
 				</Box>
 				<GridItem as="button">
@@ -226,6 +166,39 @@ function GridItem(props: StackProps): JSX.Element {
 			direction="column"
 			{...props}
 		/>
+	);
+}
+
+type TodoItemData = {
+	title: string;
+	description: string;
+};
+type TodoItemProps = BoxProps & TodoItemData;
+
+function TodoItem({
+	title,
+	description,
+	...props
+}: TodoItemProps): JSX.Element {
+	return (
+		<Box
+			p={5}
+			rounded={30}
+			bg="primary"
+			boxShadow="15px 15px 30px #adc4cf, -15px -15px 30px #ebffff"
+			{...props}
+		>
+			<Stack direction="row" float="right">
+				<InsetButton>
+					<Icon as={FaEdit} boxSize={4} />
+				</InsetButton>
+				<InsetButton>
+					<Icon as={MdDelete} boxSize={4} />
+				</InsetButton>
+			</Stack>
+			<Heading size="md">{title}</Heading>
+			<Text>{description}</Text>
+		</Box>
 	);
 }
 
