@@ -1,9 +1,12 @@
 import { extendTheme } from "@chakra-ui/react";
+import Link from "./components/Link";
 
 const theme = extendTheme({
 	colors: {
-		secondary: "#171a23",
-		primary: "#5cfff1",
+		primary: "#CCE6F4",
+	},
+	components: {
+		Link,
 	},
 	styles: {
 		global: () => ({
@@ -13,11 +16,11 @@ const theme = extendTheme({
 			body: {
 				fontFamily:
 					"-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif",
-				color: "white",
+				color: "black",
 				lineHeight: "base",
 				padding: 0,
 				margin: 0,
-				backgroundColor: "brand.secondary",
+				backgroundColor: "primary",
 			},
 			a: {
 				color: "inherit",
@@ -34,7 +37,7 @@ const theme = extendTheme({
 				background: "transparent",
 			},
 			"&::-webkit-scrollbar-thumb": {
-				background: "brand.primary",
+				background: "#adc4cf",
 				borderRadius: "50px",
 			},
 		}),

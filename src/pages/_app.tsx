@@ -1,8 +1,8 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Flex, Stack } from "@chakra-ui/react";
 import Footer from "@components/footer";
 import Header from "@components/header";
-import theme from "@styles/theme";
 import { pageview } from "@lib/gtag";
+import theme from "@styles/theme";
 import { META } from "config";
 import type { AppProps } from "next/app";
 import Head from "next/head";
@@ -20,7 +20,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 			router.events.off("routeChangeComplete", handleRouteChange);
 		};
 	}, [router.events]);
-	
+
 	return (
 		<>
 			<Head>
@@ -28,11 +28,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ChakraProvider theme={theme}>
-				<Header />
+				<Stack direction="column" minH="100vh">
+					<Header />
 
-				<Component {...pageProps} />
+					<Flex flex={1}>
+						<Component {...pageProps} />
+					</Flex>
 
-				<Footer />
+					<Footer />
+				</Stack>
 			</ChakraProvider>
 		</>
 	);

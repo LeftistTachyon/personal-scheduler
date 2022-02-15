@@ -1,33 +1,17 @@
-import { Heading, HStack } from "@chakra-ui/react";
-import NextChakraLink from "@components/nextChakraLink";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
-
+import { Heading, HStack, Spacer } from "@chakra-ui/react";
 
 export default function Main() {
 	return (
 		<HStack
-			borderTop="5px #5cfff1 solid"
-			justify="space-between"
-			bg="#1a202c"
-			px="50px"
-			py="10px"
+			bg="secondary"
+			px={16}
+			py={2.5}
 			as="header"
+			boxShadow="0 30px 60px #adc4cf"
 		>
-			<Heading>NextJS Boilerplate</Heading>
-			<HStack justify="center" align="center">
-				<NextChakraLink
-					href="https://github.com/HazimAr/"
-					aria-label="Github"
-				>
-					<FaGithub size="30px" />
-				</NextChakraLink>
-				<NextChakraLink
-					href="https://www.linkedin.com/in/hazim-arafa-a439aa205/"
-					aria-label="LinkedIn"
-				>
-					<FaLinkedin size="30px" />
-				</NextChakraLink>
-			</HStack>
+			<Heading size="lg">Today</Heading>
+			<Spacer />
+			<Heading size="lg">Personal Scheduler</Heading>
 		</HStack>
 	);
 }
