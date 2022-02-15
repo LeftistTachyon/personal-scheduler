@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link } from "@chakra-ui/react";
+import { Link, LinkProps } from "@chakra-ui/react";
 import NextLink from "next/link";
 
-
-export default function NextChakraLink(props: any) {
+export default function NextChakraLink({ children, ...props }: LinkProps) {
 	return (
 		<NextLink href={props.href} passHref>
 			<Link
@@ -13,7 +12,7 @@ export default function NextChakraLink(props: any) {
 				_focus={{ boxShadow: "none" }}
 				_hover={{ textDecoration: "none" }}
 			>
-				{props.children}
+				{children}
 			</Link>
 		</NextLink>
 	);
