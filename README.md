@@ -1,6 +1,6 @@
-# Read me
+# Personal Scheduler
 
-Proper Readme will follow
+A little neumorphic app for scheduling your day.
 
 ## Stack
 - Typescript
@@ -8,29 +8,16 @@ Proper Readme will follow
 - NextJS
 - Styled Components
 - Lightweight
-- Google Analytics
 - ESLint
 - Jest
 - React Icons
+Thank you to Hazim Arafa for providing the template that this project is built on.
+
 ## Setup
-
-Click use this template or clone with
-`git clone https://github.com/HazimAr/Nextjs-ChakraUI-Boilerplate`
-
-install dependencies `npm i` or `yarn`
-
-install prettier globally `npm i -g prettier`
-
-## Commands
-
-To run on local development server `npm run dev`
-
-To format with prettier `npm run clean`
-
-To run Tests with Jest `npm run test`
-
-To create a production build `npm run build`
+0. Make sure you have Node.js installed on your computer.
+1. Clone the repository to your computer. (`git clone https://github.com/LeftistTachyon/personal-scheduler.git`)
+2. Install dependencies with `npm i`.
+3. Run the development server with `npm run dev` or the production by building it first with `npm run build` and starting it with `npm run start`.
 
 ## License
-
-MIT Licensed template
+GNU General Public License v3.0
