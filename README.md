@@ -11,6 +11,7 @@ A little neumorphic app for scheduling your day.
 - ESLint
 - Jest
 - React Icons
+
 Thank you to Hazim Arafa for providing the template that this project is built on.
 
 ## Setup
