@@ -25,10 +25,11 @@ import { FaCheck, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { TodoItemData } from "types";
 
-type TodoItemProps = StackProps & { data: TodoItemData };
+type TodoItemProps = StackProps & { data: TodoItemData; onDelete: () => void };
 
 function TodoItem({
 	data: { title: defaultTitle, description: defaultDescription, duration },
+	onDelete,
 	...props
 }: TodoItemProps): JSX.Element {
 	const [editing, setEditing] = useBoolean();
@@ -130,7 +131,7 @@ function TodoItem({
 				<InsetButton onClick={setEditing.toggle}>
 					<Icon as={editing ? FaCheck : FaEdit} boxSize={4} />
 				</InsetButton>
-				<InsetButton>
+				<InsetButton onClick={onDelete}>
 					<Icon as={MdDelete} boxSize={4} />
 				</InsetButton>
 			</Stack>

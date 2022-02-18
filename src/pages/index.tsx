@@ -14,7 +14,7 @@ import {
 import NextChakraLink from "@components/nextChakraLink";
 import TodoItem from "@components/todoItem";
 import { DateTime, Duration } from "luxon";
-import { cloneElement, useEffect, useState } from "react";
+import { cloneElement, useEffect, useReducer, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { TodoItemData } from "types";
 
@@ -45,7 +45,7 @@ const shownHours: string[] = [
 	"23:00",
 ];
 
-const todoItems: TodoItemData[] = [
+const initialList: TodoItemData[] = [
 	{
 		title: "GFCGFHBKJNHTBHK",
 		description:
@@ -56,6 +56,19 @@ const todoItems: TodoItemData[] = [
 ];
 
 export default function Home() {
+	function reducer(state: TodoItemData[], action: any): TodoItemData[] {
+		switch (action.action) {
+			case "remove":
+				return state
+					.slice(0, action.idx)
+					.concat(state.slice(action.idx + 1));
+			default:
+				return [];
+		}
+	}
+
+	const [todoItems, changeTodo] = useReducer(reducer, initialList);
+
 	const [now, setNow] = useState(DateTime.now());
 	useEffect(() => {
 		setNow(DateTime.now());
@@ -122,8 +135,14 @@ export default function Home() {
 					>
 						{todoItems
 							.filter((item) => !item.isFixed)
-							.map((item) => (
-								<TodoItem data={item} key={item.title} />
+							.map((item, idx) => (
+								<TodoItem
+									data={item}
+									onDelete={() =>
+										changeTodo({ action: "remove", idx })
+									}
+									key={item.title}
+								/>
 							))}
 					</SimpleGrid>
 				</Box>
