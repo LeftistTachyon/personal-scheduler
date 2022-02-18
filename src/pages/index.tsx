@@ -157,8 +157,9 @@ export default function Home() {
 			<Box flex={1}>
 				<GridItem
 					position="sticky"
-					top={5}
-					// h="100%"
+					top={10}
+					// bottom="7vh"
+					h="calc(93vh - 5rem)"
 					flex={1}
 					align="stretch"
 					p={5}

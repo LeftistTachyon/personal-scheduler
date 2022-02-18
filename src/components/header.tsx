@@ -10,6 +10,7 @@ export default function Main() {
 			boxShadow="0 5px 10px #adc4cf"
 			position="sticky"
 			top={0}
+			h="7vh"
 			background="primary"
 			zIndex={1}
 		>

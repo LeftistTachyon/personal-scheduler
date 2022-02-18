@@ -1,16 +1,17 @@
 {
-	"name": "template",
+	"name": "personal-scheduler",
 	"version": "0.1.0",
-	"author": "Hazim Arafa <hazimarafa80@gmail.com>",
-	"license": "MIT",
+	"author": "Tachi Miura <tachi.miura@schoolsimplified.org>",
+	"license": "GPL-3.0 License",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/HazimAr/"
+		"url": "https://github.com/LeftistTachyon/personal-scheduler"
 	},
 	"keywords": [
-		"NextJS",
-		"ChakraUI",
-		"Boilerplate"
+		"schedule",
+		"web",
+		"app",
+		"organize"
 	],
 	"scripts": {
 		"dev": "next dev",

@@ -14,10 +14,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ChakraProvider theme={theme}>
-				<Stack direction="column" h="100vh">
+				<Stack direction="column" h="100vh" spacing={0}>
 					<Header />
 
-					<Flex flex={1} overflowY="auto" position="relative">
+					<Flex flex={1} overflowY="auto">
 						<Component {...pageProps} />
 					</Flex>
 
