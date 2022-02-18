@@ -7,7 +7,11 @@ export default function Main() {
 			px={16}
 			py={2.5}
 			as="header"
-			boxShadow="0 30px 60px #adc4cf"
+			boxShadow="0 5px 10px #adc4cf"
+			position="sticky"
+			top={0}
+			background="primary"
+			zIndex={1}
 		>
 			<Heading size="lg">Today</Heading>
 			<Spacer />

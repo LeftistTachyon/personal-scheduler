@@ -141,8 +141,11 @@ export default function Home() {
 			justifySelf="stretch"
 			align="stretch"
 			direction="row"
+			position="relative"
 			p={10}
 			minW="100%"
+			minH="100%"
+			h="fit-content"
 		>
 			<GridItem
 				as="button"
@@ -152,7 +155,15 @@ export default function Home() {
 			>
 				<Text>&lt;</Text>
 			</GridItem>
-			<GridItem flex={1} align="stretch" p={5}>
+			<GridItem
+				flex={1}
+				align="stretch"
+				alignSelf="flex-start"
+				h="100%"
+				position="sticky"
+				top="0%"
+				p={5}
+			>
 				<Grid
 					templateColumns="auto minmax(0, 1fr)"
 					columnGap={2}
@@ -190,8 +201,7 @@ export default function Home() {
 					>
 						{todoItems
 							.filter((item) => !item.isFixed)
-							.map((item, i) => {
-								const idx = i;
+							.map((item, idx) => {
 								return (
 									<TodoItem
 										data={item}
@@ -242,7 +252,12 @@ export default function Home() {
 					</NextChakraLink>
 				</GridItem>
 			</VStack>
-			<GridItem as="button">
+			<GridItem
+				as="button"
+				alignSelf="flex-start"
+				position="sticky"
+				top="50%"
+			>
 				<Text>&gt;</Text>
 			</GridItem>
 		</Stack>
