@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import NextChakraLink from "@components/nextChakraLink";
 import TodoItem from "@components/todoItem";
-import { DateTime, Duration } from "luxon";
+import { DateTime } from "luxon";
 import { cloneElement, useEffect, useReducer, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { TodoItemData } from "types";
@@ -70,9 +70,12 @@ export default function Home() {
 					"+",
 					state.slice(action.idx + 1)
 				);
-				return state
+
+				let output = state
 					.slice(0, action.idx)
 					.concat(state.slice(action.idx + 1));
+				console.log("state:", output);
+				return output;
 			case "add":
 				if (action.item) {
 					return state.concat([action.item]);
@@ -81,9 +84,9 @@ export default function Home() {
 					return state.concat([
 						{
 							title: "Example Task " + (state.length + 1),
-							isFixed: false,
 							description: "Click the pencil below to edit me!",
-							duration: Duration.fromObject({ minutes: 30 }),
+							duration: 30,
+							isFixed: false,
 						},
 					]);
 				}
@@ -95,10 +98,12 @@ export default function Home() {
 				// 	"+",
 				// 	state.slice(action.idx + 1)
 				// );
-				return state
+				output = state
 					.slice(0, action.idx)
 					.concat([action.item])
 					.concat(state.slice(action.idx + 1));
+				console.log("after set:", output);
+				return output;
 			default:
 				console.error("DEFAULT BLOCK IN REDUCER REACHED");
 				return null;
@@ -174,24 +179,23 @@ export default function Home() {
 						{todoItems
 							.filter((item) => !item.isFixed)
 							.map((item, i) => {
-								const idx = i;
 								return (
 									<TodoItem
 										data={item}
 										onDelete={() => {
 											changeTodo({
 												action: "remove",
-												idx,
+												i,
 											});
 										}}
 										onSave={(data) => {
 											changeTodo({
 												action: "set",
 												item: data,
-												idx,
+												i,
 											});
 										}}
-										key={item.title + idx}
+										key={JSON.stringify(item)}
 									/>
 								);
 							})}

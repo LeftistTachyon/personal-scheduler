@@ -32,7 +32,11 @@ type TodoItemProps = StackProps & {
 };
 
 function TodoItem({
-	data: { title: defaultTitle, description: defaultDescription, duration },
+	data: {
+		title: defaultTitle,
+		description: defaultDescription,
+		duration: defaultDuration,
+	},
 	onDelete,
 	onSave,
 	...props
@@ -40,7 +44,7 @@ function TodoItem({
 	const [editing, setEditing] = useBoolean();
 	const [title, setTitle] = useState(defaultTitle);
 	const [description, setDescription] = useState(defaultDescription);
-	const [minutes, setMinutes] = useState(duration.as("minutes"));
+	const [duration, setDuration] = useState(defaultDuration);
 	const textRef = useRef<HTMLTextAreaElement>();
 
 	// useEffect(() => {
@@ -96,10 +100,10 @@ function TodoItem({
 						<NumberInput
 							defaultValue={0}
 							min={0}
-							value={minutes}
+							value={duration}
 							variant="flushed"
-							onChange={(str) => {
-								if (str?.length) setMinutes(Number(str));
+							onChange={(_, num) => {
+								if (!isNaN(num)) setDuration(num);
 							}}
 						>
 							<NumberInputField id="minutes" />
@@ -133,8 +137,8 @@ function TodoItem({
 					<Heading size="md">{title}</Heading>
 					<Text as="i">
 						{Duration.fromObject({
-							hours: Math.floor(minutes / 60),
-							minutes: minutes % 60 ?? null,
+							hours: Math.floor(duration / 60),
+							minutes: duration % 60 ?? null,
 						}).toHuman()}
 					</Text>
 					<Text>{description}</Text>
@@ -149,8 +153,8 @@ function TodoItem({
 							onSave({
 								title,
 								description,
+								duration,
 								isFixed: false,
-								duration: Duration.fromObject({ minutes }),
 							});
 						}}
 					>

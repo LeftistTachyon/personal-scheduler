@@ -1,10 +1,13 @@
-import { DateTime, Duration } from "luxon";
+import { DateTime } from "luxon";
 
 type TodoItemData = {
 	title: string;
 	description: string;
 	isFixed: boolean;
-	duration: Duration;
+	/**
+	 * A duration stored as the number of minutes
+	 */
+	duration: number;
 	startTime?: DateTime;
 };
 
