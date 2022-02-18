@@ -56,34 +56,41 @@ const shownHours: string[] = [
 // ];
 
 export default function Home() {
+	const [taskNum, setTaskNum] = useState(0);
+
 	function reducer(state: TodoItemData[], action: any): TodoItemData[] {
 		switch (action.action) {
 			case "remove":
-				console.log(
-					"Remove",
-					action.idx,
-					"from list of length",
-					state.length
-				);
-				console.log(
-					state.slice(0, action.idx),
-					"+",
-					state.slice(action.idx + 1)
-				);
+				// console.log(
+				// 	"Remove",
+				// 	action.idx,
+				// 	"from list of length",
+				// 	state.length
+				// );
+				// console.log(
+				// 	state.slice(0, action.idx),
+				// 	"+",
+				// 	state.slice(action.idx + 1)
+				// );
 
-				let output = state
+				// let output = state
+				// 	.slice(0, action.idx)
+				// 	.concat(state.slice(action.idx + 1));
+				// console.log("state:", output);
+				// return output;
+
+				return state
 					.slice(0, action.idx)
 					.concat(state.slice(action.idx + 1));
-				console.log("state:", output);
-				return output;
 			case "add":
 				if (action.item) {
 					return state.concat([action.item]);
 				} else {
 					// console.log(state);
+					setTaskNum(taskNum + 1);
 					return state.concat([
 						{
-							title: "Example Task " + (state.length + 1),
+							title: "Example Task " + taskNum,
 							description: "Click the pencil below to edit me!",
 							duration: 30,
 							isFixed: false,
@@ -98,12 +105,17 @@ export default function Home() {
 				// 	"+",
 				// 	state.slice(action.idx + 1)
 				// );
-				output = state
+
+				// output = state
+				// 	.slice(0, action.idx)
+				// 	.concat(state.slice(action.idx + 1));
+				// console.log("after set:", output);
+				// return output;
+
+				return state
 					.slice(0, action.idx)
 					.concat([action.item])
 					.concat(state.slice(action.idx + 1));
-				console.log("after set:", output);
-				return output;
 			default:
 				console.error("DEFAULT BLOCK IN REDUCER REACHED");
 				return null;
@@ -179,21 +191,35 @@ export default function Home() {
 						{todoItems
 							.filter((item) => !item.isFixed)
 							.map((item, i) => {
+								const idx = i;
 								return (
 									<TodoItem
 										data={item}
 										onDelete={() => {
 											changeTodo({
 												action: "remove",
-												i,
+												idx,
 											});
 										}}
 										onSave={(data) => {
-											changeTodo({
-												action: "set",
-												item: data,
-												i,
-											});
+											const json = JSON.stringify(data);
+											const index = todoItems
+												.map((item) =>
+													JSON.stringify(item)
+												)
+												.findIndex((s) => s === json);
+											const isUnique =
+												index == -1 || index == idx;
+
+											if (isUnique) {
+												changeTodo({
+													action: "set",
+													item: data,
+													idx,
+												});
+											}
+
+											return isUnique;
 										}}
 										key={JSON.stringify(item)}
 									/>

@@ -2,6 +2,7 @@ import {
 	BoxProps,
 	Center,
 	FormControl,
+	FormErrorMessage,
 	FormLabel,
 	Heading,
 	HStack,
@@ -28,7 +29,7 @@ import { TodoItemData } from "types";
 type TodoItemProps = StackProps & {
 	data: TodoItemData;
 	onDelete: () => void;
-	onSave: (a: TodoItemData) => void;
+	onSave: (a: TodoItemData) => boolean;
 };
 
 function TodoItem({
@@ -42,6 +43,7 @@ function TodoItem({
 	...props
 }: TodoItemProps): JSX.Element {
 	const [editing, setEditing] = useBoolean();
+	const [isUnique, setUnique] = useBoolean(true);
 	const [title, setTitle] = useState(defaultTitle);
 	const [description, setDescription] = useState(defaultDescription);
 	const [duration, setDuration] = useState(defaultDuration);
@@ -85,11 +87,14 @@ function TodoItem({
 			{...props}
 		>
 			{editing ? (
-				<FormControl flex={1}>
+				<FormControl flex={1} isInvalid={!isUnique}>
 					<Heading size="md">
 						<Input
 							value={title}
-							onChange={(e) => setTitle(e.target.value)}
+							onChange={(e) => {
+								setUnique.on();
+								setTitle(e.target.value);
+							}}
 							placeholder="Title"
 							fontWeight="inherit"
 							fontSize="inherit"
@@ -103,7 +108,10 @@ function TodoItem({
 							value={duration}
 							variant="flushed"
 							onChange={(_, num) => {
-								if (!isNaN(num)) setDuration(num);
+								if (!isNaN(num)) {
+									setUnique.on();
+									setDuration(num);
+								}
 							}}
 						>
 							<NumberInputField id="minutes" />
@@ -122,7 +130,10 @@ function TodoItem({
 						<Textarea
 							value={description}
 							onInput={updateTextareaHeight}
-							onChange={(e) => setDescription(e.target.value)}
+							onChange={(e) => {
+								setUnique.on();
+								setDescription(e.target.value);
+							}}
 							placeholder="Description"
 							variant="flushed"
 							lineHeight="inherit"
@@ -131,6 +142,12 @@ function TodoItem({
 							ref={textRef}
 						/>
 					</Text>
+					{isUnique ? null : (
+						<FormErrorMessage>
+							You already have an event with this data! Please
+							change something or delete this event.
+						</FormErrorMessage>
+					)}
 				</FormControl>
 			) : (
 				<Stack maxW="100%" flex={1} py={2}>
@@ -148,14 +165,20 @@ function TodoItem({
 				{editing ? (
 					<InsetButton
 						onClick={() => {
-							setEditing.off();
-							console.log("Saving...");
-							onSave({
-								title,
-								description,
-								duration,
-								isFixed: false,
-							});
+							// console.log("Saving...");
+							if (
+								onSave({
+									title,
+									description,
+									duration,
+									isFixed: false,
+								})
+							) {
+								setUnique.on();
+								setEditing.off();
+							} else {
+								setUnique.off();
+							}
 						}}
 					>
 						<Icon as={FaCheck} boxSize={4} />
