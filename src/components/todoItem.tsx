@@ -25,11 +25,16 @@ import { FaCheck, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { TodoItemData } from "types";
 
-type TodoItemProps = StackProps & { data: TodoItemData; onDelete: () => void };
+type TodoItemProps = StackProps & {
+	data: TodoItemData;
+	onDelete: () => void;
+	onSave: (a: TodoItemData) => void;
+};
 
 function TodoItem({
 	data: { title: defaultTitle, description: defaultDescription, duration },
 	onDelete,
+	onSave,
 	...props
 }: TodoItemProps): JSX.Element {
 	const [editing, setEditing] = useBoolean();
@@ -54,6 +59,12 @@ function TodoItem({
 		}
 	}, [editing]);
 
+	// useEffect(() => {
+	// 	if (!editing) {
+
+	// 	}
+	// }, [editing]);
+
 	function updateTextareaHeight(e: ChangeEvent<HTMLTextAreaElement>) {
 		e.target.style.height = "auto";
 		e.target.style.height = e.target.scrollHeight + "px";
@@ -70,11 +81,12 @@ function TodoItem({
 			{...props}
 		>
 			{editing ? (
-				<FormControl>
+				<FormControl flex={1}>
 					<Heading size="md">
 						<Input
 							value={title}
 							onChange={(e) => setTitle(e.target.value)}
+							placeholder="Title"
 							fontWeight="inherit"
 							fontSize="inherit"
 							variant="flushed"
@@ -107,6 +119,7 @@ function TodoItem({
 							value={description}
 							onInput={updateTextareaHeight}
 							onChange={(e) => setDescription(e.target.value)}
+							placeholder="Description"
 							variant="flushed"
 							lineHeight="inherit"
 							resize="none"
@@ -116,7 +129,7 @@ function TodoItem({
 					</Text>
 				</FormControl>
 			) : (
-				<Stack maxW="100%" py={2}>
+				<Stack maxW="100%" flex={1} py={2}>
 					<Heading size="md">{title}</Heading>
 					<Text as="i">
 						{Duration.fromObject({
@@ -128,9 +141,26 @@ function TodoItem({
 				</Stack>
 			)}
 			<Stack direction="row" justify="center">
-				<InsetButton onClick={setEditing.toggle}>
-					<Icon as={editing ? FaCheck : FaEdit} boxSize={4} />
-				</InsetButton>
+				{editing ? (
+					<InsetButton
+						onClick={() => {
+							setEditing.off();
+							console.log("Saving...");
+							onSave({
+								title,
+								description,
+								isFixed: false,
+								duration: Duration.fromObject({ minutes }),
+							});
+						}}
+					>
+						<Icon as={FaCheck} boxSize={4} />
+					</InsetButton>
+				) : (
+					<InsetButton onClick={setEditing.on}>
+						<Icon as={FaEdit} boxSize={4} />
+					</InsetButton>
+				)}
 				<InsetButton onClick={onDelete}>
 					<Icon as={MdDelete} boxSize={4} />
 				</InsetButton>

@@ -45,29 +45,67 @@ const shownHours: string[] = [
 	"23:00",
 ];
 
-const initialList: TodoItemData[] = [
-	{
-		title: "GFCGFHBKJNHTBHK",
-		description:
-			"This is a lengthy description that only exists to take up an extremely unnecessary amount of space and appear as though that I put many hours of effort into the descriptions of these tasks.",
-		isFixed: false,
-		duration: Duration.fromObject({ hour: 1 }),
-	},
-];
+// const initialList: TodoItemData[] = [
+// 	{
+// 		title: "GFCGFHBKJNHTBHK",
+// 		description:
+// 			"This is a lengthy description that only exists to take up an extremely unnecessary amount of space and appear as though that I put many hours of effort into the descriptions of these tasks.",
+// 		isFixed: false,
+// 		duration: Duration.fromObject({ hour: 1 }),
+// 	},
+// ];
 
 export default function Home() {
 	function reducer(state: TodoItemData[], action: any): TodoItemData[] {
 		switch (action.action) {
 			case "remove":
+				console.log(
+					"Remove",
+					action.idx,
+					"from list of length",
+					state.length
+				);
+				console.log(
+					state.slice(0, action.idx),
+					"+",
+					state.slice(action.idx + 1)
+				);
 				return state
 					.slice(0, action.idx)
 					.concat(state.slice(action.idx + 1));
+			case "add":
+				if (action.item) {
+					return state.concat([action.item]);
+				} else {
+					// console.log(state);
+					return state.concat([
+						{
+							title: "Example Task " + (state.length + 1),
+							isFixed: false,
+							description: "Click the pencil below to edit me!",
+							duration: Duration.fromObject({ minutes: 30 }),
+						},
+					]);
+				}
+			case "set":
+				// console.log(
+				// 	state.slice(0, action.idx),
+				// 	"+",
+				// 	action.item,
+				// 	"+",
+				// 	state.slice(action.idx + 1)
+				// );
+				return state
+					.slice(0, action.idx)
+					.concat([action.item])
+					.concat(state.slice(action.idx + 1));
 			default:
-				return [];
+				console.error("DEFAULT BLOCK IN REDUCER REACHED");
+				return null;
 		}
 	}
 
-	const [todoItems, changeTodo] = useReducer(reducer, initialList);
+	const [todoItems, changeTodo] = useReducer(reducer, []);
 
 	const [now, setNow] = useState(DateTime.now());
 	useEffect(() => {
@@ -87,7 +125,7 @@ export default function Home() {
 			align="stretch"
 			direction="row"
 			p={10}
-			minW="100vw"
+			minW="100%"
 		>
 			<GridItem
 				as="button"
@@ -135,18 +173,34 @@ export default function Home() {
 					>
 						{todoItems
 							.filter((item) => !item.isFixed)
-							.map((item, idx) => (
-								<TodoItem
-									data={item}
-									onDelete={() =>
-										changeTodo({ action: "remove", idx })
-									}
-									key={item.title}
-								/>
-							))}
+							.map((item, i) => {
+								const idx = i;
+								return (
+									<TodoItem
+										data={item}
+										onDelete={() => {
+											changeTodo({
+												action: "remove",
+												idx,
+											});
+										}}
+										onSave={(data) => {
+											changeTodo({
+												action: "set",
+												item: data,
+												idx,
+											});
+										}}
+										key={item.title + idx}
+									/>
+								);
+							})}
 					</SimpleGrid>
 				</Box>
-				<GridItem as="button">
+				<GridItem
+					as="button"
+					onClick={() => changeTodo({ action: "add" })}
+				>
 					<Text>Add</Text>
 				</GridItem>
 				<GridItem direction="row">
