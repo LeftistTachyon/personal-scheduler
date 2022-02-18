@@ -8,22 +8,12 @@ type MetaType = {
 };
 
 const META: MetaType = {
-	title: "NextJS ChakraUI Template | Hazim Arafa",
+	title: "Personal Scheduler",
 	lang: "en-us",
-	description:
-		"Boilerplate built to scale containing Typescript + NextJS + ChakraUI + Google Analytics + ESLint + Jest + Styled Components + Icons",
-	url: "https://boilerplate.hazimarafa.tech",
+	description: "A little web app for scheduling your day",
+	url: "http://personal-scheduler.vercel.app/",
 	image: "/logo.png",
-	tags: [
-		"nextjs",
-		"typescript",
-		"chakraui",
-		"google analytics",
-		"eslint",
-		"jest",
-		"styled components",
-		"icons",
-	],
+	tags: ["schedule", "organize", "app"],
 };
 
 export { META };
