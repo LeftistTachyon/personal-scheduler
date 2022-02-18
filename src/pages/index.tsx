@@ -141,7 +141,6 @@ export default function Home() {
 			justifySelf="stretch"
 			align="stretch"
 			direction="row"
-			position="relative"
 			p={10}
 			minW="100%"
 			minH="100%"
@@ -155,44 +154,45 @@ export default function Home() {
 			>
 				<Text>&lt;</Text>
 			</GridItem>
-			<GridItem
-				flex={1}
-				align="stretch"
-				alignSelf="flex-start"
-				h="100%"
-				position="sticky"
-				top="0%"
-				p={5}
-			>
-				<Grid
-					templateColumns="auto minmax(0, 1fr)"
-					columnGap={2}
-					h="100%"
-					position="relative"
+			<Box flex={1}>
+				<GridItem
+					position="sticky"
+					top={5}
+					// h="100%"
+					flex={1}
+					align="stretch"
+					p={5}
 				>
-					{shownHours.map((hour, idx) =>
-						cloneElement(
-							<>
-								<Center textAlign="right">{hour}</Center>
-								<Box
-									borderColor="black"
-									borderTopWidth={1}
-									borderBottomWidth={
-										idx + 1 == shownHours.length ? 1 : 0
-									}
-								/>
-							</>,
-							{ key: hour }
-						)
-					)}
-					<Divider
-						borderColor="red"
-						position="absolute"
-						gridColumn={2}
-						top={percentage + "%"}
-					/>
-				</Grid>
-			</GridItem>
+					<Grid
+						templateColumns="auto minmax(0, 1fr)"
+						columnGap={2}
+						h="100%"
+						position="relative"
+					>
+						{shownHours.map((hour, idx) =>
+							cloneElement(
+								<>
+									<Center textAlign="right">{hour}</Center>
+									<Box
+										borderColor="black"
+										borderTopWidth={1}
+										borderBottomWidth={
+											idx + 1 == shownHours.length ? 1 : 0
+										}
+									/>
+								</>,
+								{ key: hour }
+							)
+						)}
+						<Divider
+							borderColor="red"
+							position="absolute"
+							gridColumn={2}
+							top={percentage + "%"}
+						/>
+					</Grid>
+				</GridItem>
+			</Box>
 			<VStack flex={{ base: 2, lg: 3 }} align="stretch" spacing={7}>
 				<Box flex={1}>
 					<SimpleGrid

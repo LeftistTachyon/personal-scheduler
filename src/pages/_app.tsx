@@ -17,7 +17,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 				<Stack direction="column" h="100vh">
 					<Header />
 
-					<Flex flex={1} overflowY="auto">
+					<Flex flex={1} overflowY="auto" position="relative">
 						<Component {...pageProps} />
 					</Flex>
 
