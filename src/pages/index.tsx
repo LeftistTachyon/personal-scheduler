@@ -155,44 +155,62 @@ export default function Home() {
 				<Text>&lt;</Text>
 			</GridItem>
 			<Box flex={1}>
-				<GridItem
+				<Stack
 					position="sticky"
 					top={10}
 					// bottom="7vh"
 					h="calc(93vh - 5rem)"
-					flex={1}
-					align="stretch"
-					p={5}
+					spacing={5}
 				>
-					<Grid
-						templateColumns="auto minmax(0, 1fr)"
-						columnGap={2}
-						h="100%"
-						position="relative"
+					<GridItem flex={1} align="stretch" p={5}>
+						<Grid
+							templateColumns="auto minmax(0, 1fr)"
+							columnGap={2}
+							h="100%"
+							position="relative"
+						>
+							{shownHours.map((hour, idx) =>
+								cloneElement(
+									<>
+										<Center textAlign="right">
+											{hour}
+										</Center>
+										<Box
+											borderColor="black"
+											borderTopWidth={1}
+											borderBottomWidth={
+												idx + 1 == shownHours.length
+													? 1
+													: 0
+											}
+										/>
+									</>,
+									{ key: hour }
+								)
+							)}
+							<Divider
+								borderColor="red"
+								position="absolute"
+								gridColumn={2}
+								top={percentage + "%"}
+							/>
+						</Grid>
+					</GridItem>
+					<GridItem
+						as="button"
+						onClick={() => changeTodo({ action: "add" })}
 					>
-						{shownHours.map((hour, idx) =>
-							cloneElement(
-								<>
-									<Center textAlign="right">{hour}</Center>
-									<Box
-										borderColor="black"
-										borderTopWidth={1}
-										borderBottomWidth={
-											idx + 1 == shownHours.length ? 1 : 0
-										}
-									/>
-								</>,
-								{ key: hour }
-							)
-						)}
-						<Divider
-							borderColor="red"
-							position="absolute"
-							gridColumn={2}
-							top={percentage + "%"}
-						/>
-					</Grid>
-				</GridItem>
+						<Text>Add</Text>
+					</GridItem>
+					<GridItem direction="row">
+						<Text>Created by LeftistTachyon</Text>
+						<NextChakraLink href="https://github.com/LeftistTachyon/">
+							<Center>
+								<Icon as={FaGithub} boxSize={5} />
+							</Center>
+						</NextChakraLink>
+					</GridItem>
+				</Stack>
 			</Box>
 			<VStack flex={{ base: 2, lg: 3 }} align="stretch" spacing={7}>
 				<Box flex={1}>
@@ -238,20 +256,6 @@ export default function Home() {
 							})}
 					</SimpleGrid>
 				</Box>
-				<GridItem
-					as="button"
-					onClick={() => changeTodo({ action: "add" })}
-				>
-					<Text>Add</Text>
-				</GridItem>
-				<GridItem direction="row">
-					<Text>Created by LeftistTachyon</Text>
-					<NextChakraLink href="https://github.com/LeftistTachyon/">
-						<Center>
-							<Icon as={FaGithub} boxSize={5} />
-						</Center>
-					</NextChakraLink>
-				</GridItem>
 			</VStack>
 			<GridItem
 				as="button"
