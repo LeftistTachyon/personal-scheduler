@@ -45,6 +45,112 @@ const shownHours: string[] = [
 	"23:00",
 ];
 
+const verbs = [
+	"Embarrass",
+	"Drag",
+	"Promise",
+	"Clean",
+	"Wash",
+	"Define",
+	"Insert",
+	"Purchase",
+	"Honor",
+	"Hang",
+	"Dazzle",
+	"Judge",
+	"Spell",
+	"Hurry",
+	"Weep",
+	"Ring",
+	"Teach",
+	"Kiss",
+	"Aggravate",
+	"Refill",
+	"Change",
+	"Strike",
+	"Admit",
+	"Answer",
+	"Inspect",
+	"Smell",
+	"Catch",
+	"Understimate",
+	"Take out",
+	"Complete",
+	"Enlist",
+	"Describe",
+	"Soften",
+	"Discolor",
+	"Handle",
+	"Use",
+	"Help",
+	"Swallow",
+	"Forgive",
+	"Pierce",
+	"Mock",
+	"Grab",
+	"Toss",
+	"Research",
+	"Intimidate",
+	"Place",
+	"Bother",
+	"Melt",
+	"Bend",
+	"Drink",
+];
+
+const nouns = [
+	"the ice cube tray",
+	"the camera",
+	"the speakers",
+	"a sticky note",
+	"the tweezers",
+	"the soap",
+	"a bookmark",
+	"an eggplant",
+	"the flag",
+	"the street lights",
+	"some notebook paper",
+	"some toothpicks",
+	"the washing machine",
+	"my sailboat",
+	"my house",
+	"the pool stick",
+	"some greeting cards",
+	"a box",
+	"a glow stick",
+	"the drawer",
+	"my drill press",
+	"a CD",
+	"a cup",
+	"my cell phone",
+	"my garage",
+	"my pants",
+	"a doll",
+	"the picture frame",
+	"the rusty nail",
+	"my sunglasses",
+	"the table",
+	"my boom box",
+	"the sofa",
+	"a canvas",
+	"the lamp shade",
+	"the newspaper",
+	"my credit card",
+	"the air freshener",
+	"my shampoo",
+	"my toothpaste",
+	"the knife",
+	"some milk",
+	"my leg warmers",
+	"the coasters",
+	"some carrots",
+	"an apple",
+	"the socks",
+	"a hair tie",
+	"a seat belt",
+	"the key chain",
+];
+
 // const initialList: TodoItemData[] = [
 // 	{
 // 		title: "GFCGFHBKJNHTBHK",
@@ -55,11 +161,21 @@ const shownHours: string[] = [
 // 	},
 // ];
 
-export default function Home() {
-	const [taskNum, setTaskNum] = useState(0);
+// function recallTaskNum(): number {
+// 	console.log("localStorage:", localStorage);
+// 	if (!localStorage) return 0;
 
+// 	const retrieved = localStorage.getItem("taskNum");
+// 	return retrieved ? Number(retrieved) : 0;
+// }
+
+export default function Home() {
 	function reducer(state: TodoItemData[], action: any): TodoItemData[] {
+		console.log("reducer called:", action);
+
 		switch (action.action) {
+			case "init":
+				return action.init;
 			case "remove":
 				// console.log(
 				// 	"Remove",
@@ -87,10 +203,13 @@ export default function Home() {
 					return state.concat([action.item]);
 				} else {
 					// console.log(state);
-					setTaskNum(taskNum + 1);
+					const randVerb =
+						verbs[Math.floor(Math.random() * verbs.length)];
+					const randNoun =
+						nouns[Math.floor(Math.random() * nouns.length)];
 					return state.concat([
 						{
-							title: "Example Task " + taskNum,
+							title: randVerb + " " + randNoun,
 							description: "Click the pencil below to edit me!",
 							duration: 30,
 							isFixed: false,
@@ -122,12 +241,28 @@ export default function Home() {
 		}
 	}
 
-	const [todoItems, changeTodo] = useReducer(reducer, []);
-
+	const [todoItems, changeTodo] = useReducer(reducer, null);
 	const [now, setNow] = useState(DateTime.now());
+
 	useEffect(() => {
+		if (todoItems !== null) {
+			console.log("Saved todoItems as", todoItems);
+			localStorage.setItem("todoItems", JSON.stringify(todoItems));
+		}
+	}, [todoItems]);
+	useEffect(() => {
+		// set now
 		setNow(DateTime.now());
+
+		// fetch local storage
+		if (todoItems === null) {
+			const saved = localStorage.getItem("todoItems");
+			const initialValue = JSON.parse(saved);
+			console.log("Fetched todoItems as", initialValue);
+			changeTodo({ action: "init", init: initialValue || [] });
+		}
 	}, []);
+
 	useInterval(() => {
 		setNow(DateTime.now());
 	}, 60_000);
@@ -218,42 +353,48 @@ export default function Home() {
 						columns={{ base: 1, lg: 2, xl: 3 }}
 						spacing={10}
 					>
-						{todoItems
-							.filter((item) => !item.isFixed)
-							.map((item, idx) => {
-								return (
-									<TodoItem
-										data={item}
-										onDelete={() => {
-											changeTodo({
-												action: "remove",
-												idx,
-											});
-										}}
-										onSave={(data) => {
-											const json = JSON.stringify(data);
-											const index = todoItems
-												.map((item) =>
-													JSON.stringify(item)
-												)
-												.findIndex((s) => s === json);
-											const isUnique =
-												index == -1 || index == idx;
+						{todoItems === null
+							? null
+							: todoItems
+									.filter((item) => !item.isFixed)
+									.map((item, idx) => {
+										return (
+											<TodoItem
+												data={item}
+												onDelete={() => {
+													changeTodo({
+														action: "remove",
+														idx,
+													});
+												}}
+												onSave={(data) => {
+													const json =
+														JSON.stringify(data);
+													const index = todoItems
+														.map((item) =>
+															JSON.stringify(item)
+														)
+														.findIndex(
+															(s) => s === json
+														);
+													const isUnique =
+														index === -1 ||
+														index === idx;
 
-											if (isUnique) {
-												changeTodo({
-													action: "set",
-													item: data,
-													idx,
-												});
-											}
+													if (isUnique) {
+														changeTodo({
+															action: "set",
+															item: data,
+															idx,
+														});
+													}
 
-											return isUnique;
-										}}
-										key={JSON.stringify(item)}
-									/>
-								);
-							})}
+													return isUnique;
+												}}
+												key={JSON.stringify(item)}
+											/>
+										);
+									})}
 					</SimpleGrid>
 				</Box>
 			</VStack>
