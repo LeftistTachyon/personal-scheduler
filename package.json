@@ -22,7 +22,7 @@
 		"kill": "taskkill /f /im node.exe"
 	},
 	"dependencies": {
-		"@chakra-ui/icons": "^1.1.5",
+		"@chakra-ui/icons": "^1.1.7",
 		"@chakra-ui/react": "^1.8.3",
 		"@emotion/react": "^11.9.0",
 		"@emotion/styled": "^11.6.0",
