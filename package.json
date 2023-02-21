@@ -34,7 +34,7 @@
 		"react-icons": "^4.3.1"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.17.9",
+		"@babel/core": "^7.21.0",
 		"@types/luxon": "^2.0.9",
 		"@types/node": "^17.0.30",
 		"@types/react": "^17.0.39",
